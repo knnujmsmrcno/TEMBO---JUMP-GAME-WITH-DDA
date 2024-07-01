@@ -1,0 +1,67 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #222;
+    margin: 0;
+}
+
+canvas {
+    border: 2px solid #fff;
+}
+
+#playButton {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px 40px;
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+    background-color: #ff4500; /* Lava color */
+    border: 2px solid #8b0000; /* Darker border */
+    border-radius: 10px;
+    cursor: pointer;
+    display: none; /* Initially hidden */
+    text-shadow: 2px 2px 4px #000000;
+    box-shadow: 0 0 10px rgba(255, 69, 0, 0.8);
+  }
+  
+  #playButton:hover {
+    background-color: #ff7373; /* Lighter lava color on hover */
+  }
+  
+  .blurred {
+    filter: blur(3px); 
+}
+
+#instructions {
+  position: absolute;
+  top: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(255, 255, 255, 0.788);
+  padding: 5px;
+  padding-left: 30px;
+  padding-right: 30px;
+  border-radius: 5px;
+  text-align: center;
+  font-family: Arial, sans-serif;
+}
+#instructions img {
+  vertical-align: middle;
+  margin-right: 5px;
+  width:30px;
+  height:30px;
+}
+
+p {
+  font-weight: bold;
+}
+
+#JUMP {
+  margin-right: 15px;
+}
+
