@@ -408,9 +408,12 @@ function detectPlatformCollision() {
 
   function hideInstructions() {
     const instructions = document.getElementById('instructions');
-  
-    if (player.score >= 10) {
+    const playButton = document.getElementById('playButton');
+    
+    if (player.score >= 10 || playButton.style.display !== 'none') {
         instructions.style.display = 'none';
+    } else {
+      instructions.style.display = 'block';
     }
   }
   
