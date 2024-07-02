@@ -3,8 +3,8 @@ class MovingPlatform extends Platform {
         super(x, y, width, height, color);
         this.initialX = x;
         this.direction = direction;
-        this.speed = speed; // Use the provided speed
-        this.range = range; // The maximum distance the platform can move from its initial position
+        this.speed = speed;
+        this.range = range;
     }
 
     update() {
@@ -73,7 +73,14 @@ function positionPlatforms(platforms, distance) {
         const currentPlatform = platforms[i];
 
         if (currentPlatform instanceof MovingPlatform || prevPlatform instanceof MovingPlatform) {
-            currentPlatform.x = Math.max(currentPlatform.x, prevPlatform.x + prevPlatform.width + distance);
+            const minDistance = prevPlatform.x + prevPlatform.width + distance;
+            if (currentPlatform.x < minDistance) {
+                if (currentPlatform.direction === 'left') {
+                    currentPlatform.direction = 'right';
+                } else {
+                    currentPlatform.direction = 'left';
+                }
+            }
         }
     }
 }
@@ -83,12 +90,13 @@ function updatePlayerPosition(player, platforms) {
 
     platforms.forEach(platform => {
         if (platform instanceof MovingPlatform) {
+            // Check if player is on the platform
             if (player.y + player.height === platform.y && player.x + player.width > platform.x && player.x < platform.x + platform.width) {
                 onMovingPlatform = true;
                 if (platform.direction === 'left') {
-                    player.x -= platform.speed;
+                    player.x -= platform.speed; // Adjust player position correctly
                 } else {
-                    player.x += platform.speed;
+                    player.x += platform.speed; // Adjust player position correctly
                 }
             }
         }
@@ -96,7 +104,10 @@ function updatePlayerPosition(player, platforms) {
 
     // Ensure the player does not get stuck moving with a platform when not on it
     if (!onMovingPlatform) {
-        // Reset player position or logic here if needed
+        // Add any additional logic if needed, for example, reset any flags
     }
 }
 
+// Ensure to call the `updatePlayerPosition` function in your game loop.
+
+// FINAL OUTPUT
