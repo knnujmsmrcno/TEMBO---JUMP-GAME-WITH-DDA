@@ -32,21 +32,21 @@ class MovingPlatform extends Platform {
 function adjustDifficulty(player, platforms) {
     console.log("Adjusting difficulty for player score:", player.score);
 
-    const distanceBetweenPlatforms = 20; // Minimum distance between platforms
+    const state = getState(player);
+    const action = chooseAction(state);
+    const distanceBetweenPlatforms = 20;
     const newPlatforms = [];
 
     platforms.forEach((platform, index) => {
         let newPlatform = platform;
 
-        if (player.score >= 30 && player.score < 50) {
+        if (action === 'easy') {
+            // No change for easy difficulty
+        } else if (action === 'medium') {
             if (index % 3 === 2 && !(platform instanceof MovingPlatform)) {
                 newPlatform = convertToMovingPlatform(platform);
             }
-        } else if (player.score >= 50 && player.score < 70) {
-            if ((index % 3 === 1 || index % 3 === 2) && !(platform instanceof MovingPlatform)) {
-                newPlatform = convertToMovingPlatform(platform);
-            }
-        } else if (player.score >= 80) {
+        } else if (action === 'hard') {
             if (!(platform instanceof MovingPlatform)) {
                 newPlatform = convertToMovingPlatform(platform);
             }
@@ -58,7 +58,16 @@ function adjustDifficulty(player, platforms) {
     positionPlatforms(newPlatforms, distanceBetweenPlatforms);
     platforms.length = 0;
     platforms.push(...newPlatforms);
+
+    // Update Q-table with reward and new state
+    const reward = getReward(player);
+    const newState = getState(player);
+    updateQTable(state, action, reward, newState);
+
+    // Decay exploration rate
+    explorationRate *= explorationDecay;
 }
+
 
 function convertToMovingPlatform(platform) {
     const direction = Math.random() < 0.5 ? 'left' : 'right';

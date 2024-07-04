@@ -34,6 +34,69 @@ function loadAssets(callback) {
     };
   };
 }
+// ----MACHINE LEARNING START CODE----
+
+let qTable = {};
+let learningRate = 0.1;
+let discountFactor = 0.9;
+let explorationRate = 1.0;
+let explorationDecay = 0.99;
+const actions = ['easy', 'medium', 'hard'];
+
+function getQValue(state, action) {
+    if (!(state in qTable)) {
+        qTable[state] = {};
+    }
+    if (!(action in qTable[state])) {
+        qTable[state][action] = 0;
+    }
+    return qTable[state][action];
+}
+
+function setQValue(state, action, value) {
+    if (!(state in qTable)) {
+        qTable[state] = {};
+    }
+    qTable[state][action] = value;
+}
+
+function chooseAction(state) {
+    if (Math.random() < explorationRate) {
+        return actions[Math.floor(Math.random() * actions.length)];
+    } else {
+        let maxQValue = -Infinity;
+        let bestAction = null;
+        for (let action of actions) {
+            const qValue = getQValue(state, action);
+            if (qValue > maxQValue) {
+                maxQValue = qValue;
+                bestAction = action;
+            }
+        }
+        return bestAction;
+    }
+}
+
+function getState(player) {
+  if (player.score < 30) return 'low';
+  if (player.score < 50) return 'medium';
+  return 'high';
+}
+
+function getReward(player) {
+  if (gameOver) return -100;
+  return player.score;
+}
+
+function updateQTable(prevState, action, reward, newState) {
+  const prevQValue = getQValue(prevState, action);
+  const maxFutureQValue = Math.max(...actions.map(a => getQValue(newState, a)));
+  const newQValue = prevQValue + learningRate * (reward + discountFactor * maxFutureQValue - prevQValue);
+  setQValue(prevState, action, newQValue);
+}
+
+// -----MACHINE LEARNING END CODE-----
+
 
 const camera = {
   x: 0,
